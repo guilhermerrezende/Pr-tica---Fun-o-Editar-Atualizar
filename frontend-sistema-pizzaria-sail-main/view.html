@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizar Usuário</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body class="bg-body-tertiary">
+    <div class="container mt-5">
+        <h1 class="text-center">View User</h1>
+        <div id="messageError" class="alert alert-danger d-none"></div>
+        <div id="userInfo" class="card p-3 d-none">
+            <p>Name: <span id="userName"></span></p>
+            <p>Email: <span id="userEmail"></span></p>
+            <p>Creation date: <span id="userCreated"></span></p>
+        </div>
+        <button id="logoutBtn" class="btn btn-outline-danger text-white mt-3 me-2">Logout</button>
+        <button id="dashboardBtn" class="btn btn-outline-info text-white mt-3 me-2">Dashboard</button>
+        <button id="editBtn" class="btn btn-outline-warning text-white mt-3">Edit</button>
+    </div>
+
+    <script>
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            // Pega o token armazenado no localStorage
+            const token = localStorage.getItem('token');
+
+            // Faz a requisição para a rota de logout no backend
+            fetch('http://localhost:8000/api/logout', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Inclui o token de autenticação
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Se o logout foi bem-sucedido, limpa o localStorage
+                    localStorage.clear();
+
+                    // Redireciona o usuário para a página de login
+                    window.location.href = 'signin.html';
+                } else {
+                    // Se houve algum erro no logout, exibe uma mensagem
+                    console.error('Erro ao deslogar');
+                }
+            })
+            .catch(error => {
+                // Em caso de falha na requisição
+                console.error('Erro de rede ao tentar deslogar:', error);
+            });
+        });
+    </script>
+    <script>
+        document.getElementById('dashboardBtn').addEventListener('click', function() {
+            window.location.href = 'dashboard.html';
+        });
+        document.getElementById('editBtn').addEventListener('click', function() {
+            window.location.href = 'edit-update.html'
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+    <script src="./assets/js/view.js"></script>
+
+</body>
+
+</html>
